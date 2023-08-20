@@ -16,7 +16,7 @@ var t_mobileno = '';
 bot.onText(/\/start/, (msg) => {
         const chatId = msg.chat.id;
         bot.sendPhoto(chatId, img_url, {
-            caption: "Welcome to Ubricoin Airdrop! 😍😍\nJoin Ubricoin Community on Telegram and earn 50 Ubricoin Tokens\n \n"
+            caption: "Welcome to Beowulf Airdrop! 😍😍\nJoin Beowulf Community on Telegram and earn 50 Beowulf Tokens\n \n"
         }).then(() => {
             var option = {
                 "reply_markup": {
@@ -34,7 +34,7 @@ bot.on('message', (msg) => {
     var send_txt1 = msg.text;
     var send_msg = "Hi";
     if (send_txt1.toString().indexOf(send_msg) === 0) {
-        bot.sendMessage(msg.chat.id, "Hello I am smart bot from Ubricoin, start the task list by replying \n /start \n /project")
+        bot.sendMessage(msg.chat.id, "Hello I am smart bot from Beowulf, start the task list by replying \n /start \n /project")
     }
 });
 
@@ -42,7 +42,7 @@ bot.on('message', (msg) => {
     var send_txt1 = msg.text;
     var send_msg = "hi";
     if (send_txt1.toString().indexOf(send_msg) === 0) {
-        bot.sendMessage(msg.chat.id, "Hello I am smart bot from Ubricoin, start the task list by replying \n /start \n /project")
+        bot.sendMessage(msg.chat.id, "Hello I am smart bot from Beowulf, start the task list by replying \n /start \n /project")
     }
 });
 // Information about project
@@ -68,11 +68,11 @@ bot.on('message', (msg) => {
     var send_txt = msg.text;
     var step1_txt = '1. Join Telegram group';
     if (send_txt.toString().indexOf(step1_txt) === 0) {
-        var text = 'Ubricoin Official Telegram Group';
+        var text = 'Beowulf Official Telegram Group';
         var keyboardStr = JSON.stringify({
             inline_keyboard: [
                 [
-                    { text: 'Join the chat 🦜', url: 'https://t.me/joinchat/I1wWclDFE7wLw9YC_dE3yA' }
+                    { text: 'Join the chat 🦜', url: 'https://t.me/ctobeowulf' }
                 ]
             ]
         });
@@ -118,7 +118,7 @@ bot.on('message', (msg) => {
     // Step 4 -Option
     var step4_txt = '4. Follow Us on Twitter';
     if (send_txt.toString().indexOf(step4_txt) === 0) {
-        var text = 'Follow Ubricoin Twitter Handle';
+        var text = 'Follow Beoulf Twitter Handle';
         var keyboardStr = JSON.stringify({
             inline_keyboard: [
                 [
