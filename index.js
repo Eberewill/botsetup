@@ -14,27 +14,38 @@ var e_wallet = '';
 var t_mobileno = '';
 
 bot.onText(/\/start/, (msg) => {
-        const chatId = msg.chat.id;
-        bot.sendPhoto(chatId, img_url, {
-            caption: "Welcome to Beowulf Airdrop! 😍😍\nJoin Beowulf Community on Telegram and earn 50 Beowulf Tokens\n \n"
-        }).then(() => {
-            var option = {
-                "reply_markup": {
-                    "keyboard": [
-                        ["1. Join Telegram group", "2. Subscribe to Youtube", "3. Telegram Username", ],
-                        ["4. Follow Us on Twitter", "5. Mobile Number", "6. E-mail address", "7. ETH address (No exchange wallet!)"]
-                    ]
-                }
-            };
-            bot.sendMessage(chatId, "Airdrop Rules ⚔️⚔️ \n 1. Join Our Telegram group. \n 2. Subscribe to Our Youtube. \n 3. Your Telegram Username.  \n 4. Follow Us on Twitter. \n 5. Your Mobile Number. \n 6. Your E-mail address. \n 7. ETH address (No exchange wallet!). \n Visit https://beowulf_block.com for more information \n", option);
-        })
-    })
+    const chatId = msg.chat.id;
+
+    // Define keyboard options with emojis as images
+    const keyboard = [
+        [{ text: "1. 📢 Join Telegram group" }, { text: "2. 🎥 Subscribe to Youtube" }, { text: "3. ✉️ Telegram Username" }],
+        [{ text: "4. 🐦 Follow Us on Twitter" }, { text: "5. 📱 Mobile Number" }, { text: "6. 📧 E-mail address" }, { text: "7. 🌐 ETH address (No exchange wallet!)" }]
+    ];
+
+    // Create reply markup with custom keyboard
+    const replyMarkup = {
+        reply_markup: {
+            keyboard: keyboard,
+            resize_keyboard: true,
+            one_time_keyboard: false
+        }
+    };
+
+    bot.sendPhoto(chatId, img_url, {
+        caption: "Welcome to Beowulf Airdrop! 😍😍\nJoin Beowulf Community on Telegram and earn 50 Beowulf Tokens\n \n"
+    }).then(() => {
+        bot.sendMessage(chatId, "Airdrop Rules ⚔️⚔️", replyMarkup);
+    });
+});
+
+
+
     // Say Hello to bot
 bot.on('message', (msg) => {
     var send_txt1 = msg.text;
     var send_msg = "Hi";
     if (send_txt1.toString().indexOf(send_msg) === 0) {
-        bot.sendMessage(msg.chat.id, "Hello I am smart bot from Beowulf, start the task list by replying \n /start \n /project")
+        bot.sendMessage(msg.chat.id, "Hello I am smart bot from Beowulf, start the task list by replying \n /start ")
     }
 });
 
@@ -42,7 +53,7 @@ bot.on('message', (msg) => {
     var send_txt1 = msg.text;
     var send_msg = "hi";
     if (send_txt1.toString().indexOf(send_msg) === 0) {
-        bot.sendMessage(msg.chat.id, "Hello I am smart bot from Beowulf, start the task list by replying \n /start \n /project")
+        bot.sendMessage(msg.chat.id, "Hello I am smart bot from Beowulf, start the task list by replying \n /start ")
     }
 });
 // Information about project
