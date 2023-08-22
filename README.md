@@ -32,7 +32,7 @@ Before setting up the Telegram Token Info Bot, make sure you have the following:
 2. Install dependencies:
 
    ```bash
-   pip install -r requirements.txt
+   npm install 
    ```
 
 3. Open the `config.py` file and enter your Telegram bot token, `botTokenId` from TokenFather, and Moralis API token:
