@@ -1,135 +1,227 @@
-const TelegramBot = require('node-telegram-bot-api');
-const token = '' // suply yours
-const   apiKey = "" // suply yours
-const Moralis = require("moralis").default;
-const { EvmChain } = require("@moralisweb3/common-evm-utils");
-  
+////dont touch
+const express = require("express");
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
+////end of dont touch
+const TelegramBot = require("node-telegram-bot-api");
+const fs = require("fs");
+
+// Set up your bot token
+const token = "6372895753:AAEXJQ5iqcpFRU-kGveMJXFuTJOa3ZRbMLs";
+
+// Create an instance of the TelegramBot class
 const bot = new TelegramBot(token, { polling: true });
-const img_url = 'https://images.unsplash.com/photo-1636953099671-481a72803051?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1032&q=80'
 
-Moralis.start({
-    apiKey: apiKey
-  });
-
-const  fetchCoinDataMoralis = async (contractAddress) => {
-   try {
-    
-    
-      const chain = EvmChain.ETHEREUM;
-    const address = contractAddress.toString()
-      const response = await Moralis.EvmApi.token.getTokenPrice({
-        address,
-        chain,
-      });
-    
-      const resBody = response.toJSON()
-      return {
-        symbol:  resBody.tokenSymbol,
-        name: resBody.tokenName,
-        thumb: resBody.tokenLogo || "https://etherscan.io/images/main/empty-token.png",
-        price: resBody.usdPriceFormatted
-      }
-   } catch (error) {
-    console.log("eer", error)
-    return error
-   }
-  };
-
-
-
-var contractAdddress = '';
-
-bot.onText(/\/start/, (msg) => {
-    const chatId = msg.chat.id;
-
-    // Define keyboard options with emojis as images and descriptive text
-    const keyboard = [
-        [{ text: "📢 Price Tracking", callback_data: "price_tracking" }, { text: "🎥 Trending", callback_data: "trending" }],
-    ];
-
-    // Create reply markup with custom keyboard
-    const replyMarkup = {
+// Create a state variable for each user
+const userStates = {};
+// Handle incoming messages
+bot.on("message", (msg) => {
+  // Implement your bot's functionality here
+  if (msg.text === "/start") {
+    // Check if it's the user's first time opening the bot
+    const userDataPath = `./userData/${msg.from.id}.json`;
+    if (!fs.existsSync(userDataPath)) {
+      // Create the welcome message
+      const headerText = "*Welcome to My Bot!*";
+      const welcomeText =
+        "Thank you for joining. Let me assist you with any queries you have.";
+      const startButton = {
         reply_markup: {
-            keyboard: keyboard,
-            resize_keyboard: true,
-            one_time_keyboard: false
-        }
-    };
+          keyboard: [[{ text: "Start" }]],
+          resize_keyboard: true,
+          one_time_keyboard: true,
+        },
+      };
 
-    bot.sendPhoto(chatId, img_url, {
-        caption:  "Hello there! 🌟\nExplore the world of cryptocurrency with us."
-    }).then(() => {
-        bot.sendMessage(chatId, "How can we assist you today? 🛠️🤖", replyMarkup);
-    });
-});
+      // Save user data to indicate that the user has opened the bot before
+      const userData = {
+        hasOpenedBot: true,
+      };
+      fs.writeFileSync(userDataPath, JSON.stringify(userData));
 
-
-// Say Hello to bot
-bot.on('message', (msg) => {
-    var send_txt1 = msg.text;
-    var send_msg = "Hi";
-    if (send_txt1.toString().indexOf(send_msg) === 0) {
-        bot.sendMessage(msg.chat.id, "Hello I am smart bot from Beowulf, start the task list by replying \n /start ")
+      // Send the welcome message
+      bot.sendMessage(
+        msg.chat.id,
+        `${headerText}\n\n${welcomeText}`,
+        startButton
+      );
     }
-});
-
-bot.on('message', (msg) => {
-    var send_txt1 = msg.text;
-    var send_msg = "hi";
-    if (send_txt1.toString().indexOf(send_msg) === 0) {
-        bot.sendMessage(msg.chat.id, "Hello I am smart bot from Beowulf, start the task list by replying \n /start ")
-    }
-});
-
-
-bot.on('message', (msg) => {
-    var send_txt = msg.text;
-
-const step2_txt = '📢 Price Tracking';
-if (send_txt.toString().indexOf(step2_txt) === 0) {
-    const erc20AddressMessage = "🔑 Please provide a valid ERC20 address on the Ethereum network (starting with 0x).";
-    bot.sendMessage(msg.chat.id, erc20AddressMessage);
   }
+});
 
-const re_eth = /^0x[a-fA-F0-9]{40}$/g;
+// Handle incoming messages
+bot.on("message", (msg) => {
+  // Implement your bot's functionality here
+  if (msg.text === "/menu" || "/start") {
+    // Create the formatted message
+    const message = `
+Hello ${msg.from.username}! 🌟
+Welcome to using the Quantum Chain AI BOT on Telegram! 🌴
 
-if (re_eth.test(send_txt)) {
-    contractAdddress = send_txt;
+👉 You can utilize me for the following tasks:
+- NEW: Mint NFTs out of generated images on SKALE, gas-free!
+- AI Assistant with Text & Image Input
+- Google & YouTube Smart Search
+- ERC20 Token Analysis
+- Voice Message
 
-    //console.log("ADD is ", contractAdddress)
-    fetchCoinDataMoralis(contractAdddress).then((c_data) => {
-        // Create the message text with coin information
-        const messageText = `
-🪙 Token: ${c_data.name} (${c_data.symbol.toUpperCase()})
-
-💰 Price: ${c_data.price}
+💡 Be sure to visit Quantum Chain  to learn more about the project!
 `;
 
-        // Send coin information with a photo and formatted text
-        bot.sendPhoto(msg.chat.id, c_data.thumb, {
-            caption: messageText
-        }).then(() => {
-            // Provide options to buy or sell
-            bot.sendMessage(msg.chat.id, 'Do you want to:', {
-                reply_markup: {
-                    keyboard: [
-                        [{ text: "Buy 💰" }],
-                        [{ text: "Sell 💸" }]
-                    ],
-                    resize_keyboard: true
-                }
-            });
-        });
-    }).catch((err)=> {
-        bot.sendMessage(msg.chat.id, 'Token not found:', {
-            reply_markup: {
-                keyboard: [
-                    [{ text: "📢 Price Tracking", callback_data: "price_tracking" }, { text: "🎥 Trending", callback_data: "trending" }],
-   
-                ],
-                resize_keyboard: true
-            }
-        });
-    });
-}
+    const options = {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: "Asistant", callback_data: "asistant" },
+            { text: "AI Search", callback_data: "ai_search" },
+          ],
+          [
+            { text: "Token Analysis", callback_data: "token_analysis" },
+            { text: "Topics", callback_data: "topics" },
+          ],
+          [
+            { text: "Voice Message", callback_data: "voice_message" },
+            { text: "Image Gen", callback_data: "image_gen" },
+          ],
+          [
+            { text: "Wallet Menu", callback_data: "wallet_menu" },
+            { text: "Web3 Portal", callback_data: "web3_portal" },
+          ],
+          [
+            { text: "Group Functions", callback_data: "group_function" },
+            { text: "Quantum Portal", callback_data: "quantum_portal" },
+          ],
+        ],
+      },
+    };
+
+    // Send the formatted message with options
+    bot.sendMessage(msg.chat.id, message, options);
+  }
 });
+
+// Handle callback queries
+bot.on("callback_query", (query) => {
+  // Implement your bot's functionality for each option here
+  const option = query.data;
+  // Example handling for each option
+  switch (option) {
+    // Handle the "Buy token" option
+    case "asistant":
+      const message = `How can I help you? You can send me either images or text! 
+TIP: Caption your images for specific results.`;
+
+      bot.sendMessage(query.message.chat.id, message).then(() => {
+        userStates[query.from.id] = "awaiting_wallet_address_buy_token";
+      });
+      break;
+    //Please enter your search query:
+    case "ai_search":
+      bot
+        .sendMessage(query.message.chat.id, `Please enter your search query:`)
+        .then(() => {});
+      break;
+
+    //token_analysis
+    case "token_analysis":
+      bot
+        .sendMessage(
+          query.message.chat.id,
+          `Please enter the ERC-20 token contract address, name, or symbol`
+        )
+        .then(() => {});
+      break;
+
+    //token_analysis
+    case "topics":
+      bot
+        .sendMessage(
+          query.message.chat.id,
+          `How can I help you? You can send me either images or text! 
+TIP: Caption your images for specific results.`
+        )
+        .then(() => {});
+      break;
+
+    case "voice_message":
+      bot
+        .sendMessage(query.message.chat.id, `Please send a voice message now.`)
+        .then(() => {});
+      break;
+
+    case "image_gen":
+      const imageGenMsg = `
+Welcome to the Quantum AI Project's ImgGen! 
+
+❓ What can you do currently?
+You can both generate and edit images with the bot and mint them as NFTs on SKALE. Prompting will be automatically enhanced. 
+Remember to include a hint at the style of image you want, if it matters e.g. 'realistic'.
+
+⚙️ Features
+- Generate & edit high-quality images
+- Free users can generate up to three high-quality images per one hour. - Unlimited image editing 
+🫰Extras for Quantum holders:
+- Access to exclusive filtered model 
+- Retry generating (unlimited)
+- Increased generation cap of 20 images per hour.
+- No watermark.`;
+
+      const imageGenMsg_options = {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "Create Image", callback_data: "_" }],
+            [{ text: "Create Artwork", callback_data: "_" }],
+            [{ text: "Generate Video (Sora)", callback_data: "_" }],
+            [{ text: "Edit Image", callback_data: "_" }],
+            [{ text: "Enter Product key", callback_data: "_" }],
+            [
+              {
+                text: "Back",
+                callback_data: "image_gen",
+              },
+            ],
+          ],
+        },
+      };
+
+      bot
+        .sendMessage(query.message.chat.id, imageGenMsg, imageGenMsg_options)
+        .then(() => {});
+      break;
+  }
+  // Respond to the callback query (acknowledge the button click)
+  bot.answerCallbackQuery(query.id);
+});
+
+bot.on("message", (msg) => {
+  // Check if the state is 'awaiting_wallet_address'
+  //if (userStates[msg.from.id] === 'awaiting_wallet_address_buy_token') {
+  // Check if the message text is a valid wallet address
+  // if (isValidWalletAddress(msg.text)) {
+  // Store the wallet address and reset the state
+  // userWalletAddress = msg.text;
+  // userStates[msg.from.id] = null;
+
+  //  } else {
+  //  bot
+  //   .sendMessage(msg.chat.id, `⚠️Invalid token address: \n ${msg.text}`)
+  // .then(() => {
+  //     bot.sendMessage(msg.chat.id, '📝Enter wallet address:');
+  //  });
+  // }
+
+  bot.sendMessage(msg.chat.id, `recieved \n ${msg.text}`);
+});
+
+function isValidWalletAddress(address) {
+  // Implement your validation logic here
+  return address.startsWith("0x") && address.length === 42;
+}
