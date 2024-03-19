@@ -1,4 +1,3 @@
-
 ////dont touch
 const express = require("express");
 const app = express();
@@ -16,7 +15,7 @@ const TelegramBot = require("node-telegram-bot-api");
 const fs = require("fs");
 
 // Set up your bot token
-const token = "6814437047:AAHWcT8H6CnbDwzPoaDDYEGo-ByCfQEmCaA";
+const token = "6372895753:AAEXJQ5iqcpFRU-kGveMJXFuTJOa3ZRbMLs";
 
 // Create an instance of the TelegramBot class
 const bot = new TelegramBot(token, { polling: true });
@@ -64,30 +63,17 @@ bot.on("message", (msg) => {
   if (msg.text === "/menu" || "/start") {
     // Create the formatted message
     const message = `
-Hi ${msg.from.username}, Welcome to the Artify AI Bot! 
-                       
-Disclaimer:
+Hello ${msg.from.username}! 🌟
+Welcome to using the Quantum Chain AI BOT on Telegram! 🌴
 
-Please keep in mind that this is a prototype for our community to test before we officially launch our fully-functional AI Image Generation Tool, Artify  V2. By using this Bot, you understand accept that: 
-1. It is an AI prototype and the images generated may not be 100% accurate.
-2. The Bot may produce unintended images that might not be safe for work or politically correct. 
-3. In such instances or otherwise, the outputs of the Bot does not reflect the views of the team behind Artify  AI and any connected entity(s), and are not liable to any losses incurred to the user, emotional or otherwise, as a result of the images generated. 
-4. Artify  AI does not own any images generated using this bit and 100% of the ownership of all images generated using this bot, by a user, lies with the said user. 
-5. Since this is a prototype, we have limited the number of generations to 3 prompts per user.
+👉 You can utilize me for the following tasks:
+- NEW: Mint NFTs out of generated images on SKALE, gas-free!
+- AI Assistant with Text & Image Input
+- Google & YouTube Smart Search
+- ERC20 Token Analysis
+- Voice Message
 
-Available Prompts:
-To start: /start
-To prompt: /prompt 
-Check balance: /balance 
-
-Prompt Syntax: 
-/prompt <space> your prompt <space>  negative_prompt <space> your negative prompt
-
-Note: Negative Prompts are optional. 
-
-Contribute to our $IMAGE presale to get access early access to Artify as a Beta Tester!
-
-Happy Prompting…
+💡 Be sure to visit Quantum Chain  to learn more about the project!
 `;
 
     const options = {
@@ -118,7 +104,7 @@ Happy Prompting…
     };
 
     // Send the formatted message with options
-    bot.sendMessage(msg.chat.id, message);
+    bot.sendMessage(msg.chat.id, message, options);
   }
 });
 
@@ -231,6 +217,7 @@ bot.on("message", (msg) => {
   //     bot.sendMessage(msg.chat.id, '📝Enter wallet address:');
   //  });
   // }
+
   bot.sendMessage(msg.chat.id, `recieved \n ${msg.text}`);
 });
 
