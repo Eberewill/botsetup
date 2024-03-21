@@ -85,8 +85,6 @@ Prompt Syntax:
 
 Note: Negative Prompts are optional. 
 
-Contribute to our $IMAGE presale to get access early access to Artify as a Beta Tester!
-
 Happy Prompting…
 `;
 
