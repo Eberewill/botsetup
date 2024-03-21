@@ -68,7 +68,7 @@ Hi ${msg.from.username}, Welcome to the Artify AI Bot!
                        
 Disclaimer:
 
-Please keep in mind that this is a prototype for our community to test before we officially launch our fully-functional AI Image Generation Tool, Artify  V2. By using this Bot, you understand accept that: 
+Please keep in mind that this is a prototype for our community to test before we officially launch our fully-functional AI Image Generation Tool, Artify. By using this Bot, you understand accept that: 
 1. It is an AI prototype and the images generated may not be 100% accurate.
 2. The Bot may produce unintended images that might not be safe for work or politically correct. 
 3. In such instances or otherwise, the outputs of the Bot does not reflect the views of the team behind Artify  AI and any connected entity(s), and are not liable to any losses incurred to the user, emotional or otherwise, as a result of the images generated. 
